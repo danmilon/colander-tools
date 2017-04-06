@@ -65,6 +65,9 @@ def _patch_serializable_class(cls):
         return schema.serialize(self)
 
     def deserialize(cls, values, bind_kwargs=None):
+        if hasattr(cls, "pre_deserialize"):
+            values = cls.pre_deserialize(values)
+
         schema = cls.Schema()
         if bind_kwargs is not None:
             schema = schema.bind(**bind_kwargs)
